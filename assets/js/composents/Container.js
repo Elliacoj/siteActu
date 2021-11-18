@@ -1,6 +1,7 @@
 import {Title} from "./Title";
 import {Footer} from "./Footer";
 import {Articles} from "./Articles";
+import {ButtonMode} from "./ButtonMode";
 
 class Container {
     constructor() {
@@ -8,6 +9,7 @@ class Container {
         this.title = new Title();
         this.footer = new Footer();
         this.article = new Articles();
+        this.button = new ButtonMode();
     }
 
     init() {
@@ -17,6 +19,8 @@ class Container {
         this.title.init(this.divContainer);
         this.article.init(this.divContainer);
         this.footer.init(this.divContainer);
+        this.button.init(this.divContainer);
+        this.button.click();
     }
 }
 
