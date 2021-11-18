@@ -15,6 +15,11 @@ class Article {
         if(img === null) {
             img = "./build/images/default.png";
         }
+
+        if(author === null) {
+            author = "Anonyme";
+        }
+
         this.title.innerHTML = title;
         this.content.innerHTML = content;
         this.author.innerHTML = author;
