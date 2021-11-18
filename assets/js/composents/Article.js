@@ -18,7 +18,7 @@ class Article {
         this.title.innerHTML = title;
         this.content.innerHTML = content;
         this.author.innerHTML = author;
-        this.date.innerHTML = date;
+        this.date.innerHTML = (new Date(date)).toLocaleString();
         this.image.src = img;
         this.source.innerHTML = source;
 
