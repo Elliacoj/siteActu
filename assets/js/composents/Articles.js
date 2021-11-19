@@ -8,6 +8,8 @@ class Articles {
      * Constructor
      */
     constructor() {
+        this.expanded = false;
+        this.scrollY = 0;
         this.divArticles = document.createElement("div");
     }
 
@@ -28,21 +30,25 @@ class Articles {
                 limit: 20,
                 offset: 20,
             }
-        }).done(function(data) {
-            let dataArticles = data.data;
-            dataArticles.sort(function compare(a, b) {
-                if (a.published_at < b.published_at)
-                    return -1;
-                if (a.published_at > b.published_at )
-                    return 1;
-                return 0;
-            }).reverse();
+        })
+            .done(data => {
+                let dataArticles = data.data;
+                dataArticles.sort(function compare(a, b) {
+                    if (a.published_at < b.published_at)
+                        return -1;
+                    if (a.published_at > b.published_at )
+                        return 1;
+                    return 0;
+                }).reverse();
 
-            dataArticles.forEach(function (e) {
-                let article = new Article();
-                article.init(e.title, e.description, e.author, e.published_at, e.image, e.source);
-            })
-        });
+                dataArticles.forEach(function (e) {
+                    let article = new Article();
+                    article.init(e.title, e.description, e.author, e.published_at, e.image, e.source);
+                })
+
+                this.viewArticle();
+
+            });
     }
 
     /**
@@ -66,40 +72,67 @@ class Articles {
                 paragraphUpperBound: 7,
         });
 
+        divArticle.forEach( e => e.addEventListener("click", () => this.animation(e, divArticle, p, width)));
+    }
 
 
-        divArticle.forEach(function (e) {
-            e.addEventListener("click", animation);
+    /**
+     *
+     * @param e
+     * @param divArticle
+     * @param p
+     * @param width
+     */
+    animation(e, divArticle, p, width) {
+        e.removeEventListener("click", this.animation);
+        if(this.expanded === false) {
+            this.scrollY = window.scrollY;
+        }
 
-            function animation() {
-                e.removeEventListener("click", animation);
+        divArticle.forEach(function (b) {
 
-                divArticle.forEach(function (b) {
-
-                    if(b !== e && b.className === "divArticle visible") {
-                        b.animate([
-                                {
-                                    opacity: 0,
-                                    easing: 'ease-in',
-                                }
-                            ],
-                            {
-                                duration: 500,
-                                easing: "linear",
-                                fill: "forwards",
-                            }
-                        )
-                        setTimeout(function () {
-                            b.style.display = "none";
-                            b.className = "divArticle hidden";
-                        }, 500);
+            if(b !== e && b.className === "divArticle visible") {
+                b.animate(
+                    [
+                        {
+                            opacity: 0,
+                            easing: 'ease-in',
+                        }
+                    ],
+                    {
+                        duration: 500,
+                        easing: "linear",
+                        fill: "forwards",
                     }
-                    else if(b !== e) {
-                        b.style.display = "flex";
-                        b.className = "divArticle visible";
+                )
+                setTimeout(function () {
+                    b.style.display = "none";
+                    b.className = "divArticle hidden";
+                }, 500);
+            }
+            else if(b !== e) {
+                b.style.display = "flex";
+                b.className = "divArticle visible";
+                b.animate([
+                        {
+                            opacity: 1,
+                            easing: 'ease-in',
+                        }
+                    ],
+                    {
+                        duration: 500,
+                        easing: "linear",
+                        fill: "forwards",
+                    }
+                );
+            }
+            else {
+                if(window.matchMedia("(min-width: 700px)").matches) {
+                    if(b.className === "divArticle visible") {
+                        b.firstChild.childNodes[2].after(p);
                         b.animate([
                                 {
-                                    opacity: 1,
+                                    width: "90%",
                                     easing: 'ease-in',
                                 }
                             ],
@@ -109,60 +142,49 @@ class Articles {
                                 fill: "forwards",
                             }
                         );
+                        b.className = "divArticle visible view";
                     }
                     else {
-                        if(window.matchMedia("(min-width: 700px)").matches) {
-                            if(b.className === "divArticle visible") {
-                                b.firstChild.childNodes[2].after(p);
-                                b.animate([
-                                        {
-                                            width: "90%",
-                                            easing: 'ease-in',
-                                        }
-                                    ],
-                                    {
-                                        duration: 500,
-                                        easing: "linear",
-                                        fill: "forwards",
-                                    }
-                                );
-                                b.className = "divArticle visible view";
+                        b.firstChild.childNodes[3].remove();
+                        b.animate([
+                                {
+                                    width: width,
+                                    easing: 'ease-in',
+                                }
+                            ],
+                            {
+                                duration: 500,
+                                easing: "linear",
+                                fill: "forwards",
                             }
-                            else {
-                                b.firstChild.childNodes[3].remove();
-                                b.animate([
-                                        {
-                                            width: width,
-                                            easing: 'ease-in',
-                                        }
-                                    ],
-                                    {
-                                        duration: 500,
-                                        easing: "linear",
-                                        fill: "forwards",
-                                    }
-                                );
-                                b.className = "divArticle visible";
-                            }
-
-                        }
-                        else {
-                            if(b.className === "divArticle visible") {
-                                b.firstChild.childNodes[2].after(p);
-                                b.className = "divArticle visible view";
-                            }
-                            else {
-                                b.firstChild.childNodes[3].remove();
-                                b.className = "divArticle visible";
-                            }
-                        }
+                        );
+                        b.className = "divArticle visible";
                     }
-                })
-                setTimeout(function () {
-                    e.addEventListener("click", animation);
-                }, 600);
+
+                }
+                else {
+                    if(b.className === "divArticle visible") {
+                        b.firstChild.childNodes[2].after(p);
+                        b.className = "divArticle visible view";
+                    }
+                    else {
+                        b.firstChild.childNodes[3].remove();
+                        b.className = "divArticle visible";
+                    }
+                }
             }
-        })
+        });
+
+        if (this.expanded) {
+            this.expanded = false;
+            window.scrollTo(0, this.scrollY);
+            this.scrollY = 0;
+        }
+        else {
+            this.expanded = true;
+        }
+
+        setTimeout(() =>  e.addEventListener("click", this.animation), 600);
     }
 }
 

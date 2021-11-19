@@ -2,6 +2,7 @@ import {Title} from "./Title";
 import {Footer} from "./Footer";
 import {Articles} from "./Articles";
 import {ButtonMode} from "./ButtonMode";
+import {logPlugin} from "@babel/preset-env/lib/debug";
 
 class Container {
 
@@ -28,7 +29,7 @@ class Container {
         this.footer.init(this.divContainer);
         this.button.init(this.divContainer);
         this.button.click();
-        setTimeout(this.article.viewArticle, 1000);
+
     }
 }
 
