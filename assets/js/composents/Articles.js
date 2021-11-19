@@ -42,6 +42,10 @@ class Articles {
         let p = document.createElement("p");
         let width = divArticle[0].style.width;
 
+        window.addEventListener('resize', function () {
+            width = divArticle[0].style.width;
+        }, false);
+
         p.style.cssText = "font-size: 2.8rem; padding: 4rem 3rem";
 
         p.innerHTML =
@@ -52,16 +56,20 @@ class Articles {
         });
 
         divArticle.forEach(function (e) {
-            e.addEventListener("click", function () {
+            e.addEventListener("click", animation);
+
+            function animation() {
+                e.removeEventListener("click", animation);
+
                 divArticle.forEach(function (b) {
 
                     if(b !== e && b.className === "divArticle visible") {
                         b.animate([
-                            {
-                                opacity: 0,
-                                easing: 'ease-in',
-                            }
-                        ],
+                                {
+                                    opacity: 0,
+                                    easing: 'ease-in',
+                                }
+                            ],
                             {
                                 duration: 500,
                                 easing: "linear",
@@ -122,13 +130,27 @@ class Articles {
                                     }
                                 );
                                 b.className = "divArticle visible";
+                                b.scrollTo();
                             }
 
                         }
-
+                        else {
+                            if(b.className === "divArticle visible") {
+                                b.firstChild.childNodes[2].after(p);
+                                b.className = "divArticle visible view";
+                            }
+                            else {
+                                b.firstChild.childNodes[3].remove();
+                                b.className = "divArticle visible";
+                                b.scrollTo();
+                            }
+                        }
                     }
                 })
-            })
+                setTimeout(function () {
+                    e.addEventListener("click", animation);
+                }, 600);
+            }
         })
     }
 }
