@@ -1,4 +1,8 @@
 class Article {
+
+    /**
+     * Constructor
+     */
     constructor() {
         this.divContainer = document.createElement("div");
         this.divRight = document.createElement("div");
@@ -11,6 +15,15 @@ class Article {
         this.source = document.createElement("p");
     }
 
+    /**
+     * Init the Article
+     * @param title
+     * @param content
+     * @param author
+     * @param date
+     * @param img
+     * @param source
+     */
     init(title, content, author, date, img, source) {
         this.divContainer.className = "divArticle visible";
         if(img === null) {
@@ -52,6 +65,9 @@ class Article {
         this.mediaQuery();
     }
 
+    /**
+     * Add media query for div container
+     */
     mediaQuery() {
         let div = this.divContainer;
         check();

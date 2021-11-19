@@ -4,6 +4,10 @@ import {Articles} from "./Articles";
 import {ButtonMode} from "./ButtonMode";
 
 class Container {
+
+    /**
+     * Constructor
+     */
     constructor() {
         this.divContainer = document.createElement("div");
         this.title = new Title();
@@ -12,6 +16,9 @@ class Container {
         this.button = new ButtonMode();
     }
 
+    /**
+     * Init the container
+     */
     init() {
         this.divContainer.style.cssText = "width: 100%;";
         document.body.appendChild(this.divContainer);

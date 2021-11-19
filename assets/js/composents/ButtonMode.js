@@ -1,8 +1,16 @@
 class ButtonMode {
+
+    /**
+     * Constructor
+     */
     constructor() {
         this.button = document.createElement("div");
     }
 
+    /**
+     * Init the button mode
+     * @param divContainer
+     */
     init(divContainer) {
         this.button.style.cssText = "position: absolute; top: 2rem; right: 2rem; width: 50px; height: 50px; background-color: black; cursor: pointer; border-radius: 2rem;";
         divContainer.appendChild(this.button);
@@ -21,6 +29,9 @@ class ButtonMode {
         }
     }
 
+    /**
+     * Adapt the css with a click
+     */
     click() {
         this.button.addEventListener("click", () => {
             console.log("ok");

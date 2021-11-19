@@ -3,10 +3,18 @@ import {Article} from "./Article";
 import { loremIpsum } from "lorem-ipsum";
 
 class Articles {
+
+    /**
+     * Constructor
+     */
     constructor() {
         this.divArticles = document.createElement("div");
     }
 
+    /**
+     * Init the div container
+     * @param divContainer
+     */
     init(divContainer) {
         divContainer.appendChild(this.divArticles);
         this.divArticles.style.cssText = "width: 100%";
@@ -37,6 +45,9 @@ class Articles {
         });
     }
 
+    /**
+     * Adapt the container for one article
+     */
     viewArticle() {
         let divArticle = document.querySelectorAll(".divArticle");
         let p = document.createElement("p");
@@ -54,6 +65,8 @@ class Articles {
                 paragraphLowerBound: 3,
                 paragraphUpperBound: 7,
         });
+
+
 
         divArticle.forEach(function (e) {
             e.addEventListener("click", animation);
@@ -95,7 +108,7 @@ class Articles {
                                 easing: "linear",
                                 fill: "forwards",
                             }
-                        )
+                        );
                     }
                     else {
                         if(window.matchMedia("(min-width: 700px)").matches) {
@@ -130,7 +143,6 @@ class Articles {
                                     }
                                 );
                                 b.className = "divArticle visible";
-                                b.scrollTo();
                             }
 
                         }
@@ -142,7 +154,6 @@ class Articles {
                             else {
                                 b.firstChild.childNodes[3].remove();
                                 b.className = "divArticle visible";
-                                b.scrollTo();
                             }
                         }
                     }
