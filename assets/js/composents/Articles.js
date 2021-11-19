@@ -1,5 +1,6 @@
 import $ from "jquery";
 import {Article} from "./Article";
+import { loremIpsum } from "lorem-ipsum";
 
 class Articles {
     constructor() {
@@ -34,6 +35,101 @@ class Articles {
                 article.init(e.title, e.description, e.author, e.published_at, e.image, e.source);
             })
         });
+    }
+
+    viewArticle() {
+        let divArticle = document.querySelectorAll(".divArticle");
+        let p = document.createElement("p");
+        let width = divArticle[0].style.width;
+
+        p.style.cssText = "font-size: 2.8rem; padding: 4rem 3rem";
+
+        p.innerHTML =
+            loremIpsum({
+                count: 5,
+                paragraphLowerBound: 3,
+                paragraphUpperBound: 7,
+        });
+
+        divArticle.forEach(function (e) {
+            e.addEventListener("click", function () {
+                divArticle.forEach(function (b) {
+
+                    if(b !== e && b.className === "divArticle visible") {
+                        b.animate([
+                            {
+                                opacity: 0,
+                                easing: 'ease-in',
+                            }
+                        ],
+                            {
+                                duration: 500,
+                                easing: "linear",
+                                fill: "forwards",
+                            }
+                        )
+                        setTimeout(function () {
+                            b.style.display = "none";
+                            b.className = "divArticle hidden";
+                        }, 500);
+                    }
+                    else if(b !== e) {
+                        b.style.display = "flex";
+                        b.className = "divArticle visible";
+                        b.animate([
+                                {
+                                    opacity: 1,
+                                    easing: 'ease-in',
+                                }
+                            ],
+                            {
+                                duration: 500,
+                                easing: "linear",
+                                fill: "forwards",
+                            }
+                        )
+                    }
+                    else {
+                        if(window.matchMedia("(min-width: 700px)").matches) {
+                            if(b.className === "divArticle visible") {
+                                b.firstChild.childNodes[2].after(p);
+                                b.animate([
+                                        {
+                                            width: "90%",
+                                            easing: 'ease-in',
+                                        }
+                                    ],
+                                    {
+                                        duration: 500,
+                                        easing: "linear",
+                                        fill: "forwards",
+                                    }
+                                );
+                                b.className = "divArticle visible view";
+                            }
+                            else {
+                                b.firstChild.childNodes[3].remove();
+                                b.animate([
+                                        {
+                                            width: width,
+                                            easing: 'ease-in',
+                                        }
+                                    ],
+                                    {
+                                        duration: 500,
+                                        easing: "linear",
+                                        fill: "forwards",
+                                    }
+                                );
+                                b.className = "divArticle visible";
+                            }
+
+                        }
+
+                    }
+                })
+            })
+        })
     }
 }
 

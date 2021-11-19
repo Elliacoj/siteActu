@@ -21,6 +21,7 @@ class Container {
         this.footer.init(this.divContainer);
         this.button.init(this.divContainer);
         this.button.click();
+        setTimeout(this.article.viewArticle, 1000);
     }
 }
 

@@ -12,6 +12,7 @@ class Article {
     }
 
     init(title, content, author, date, img, source) {
+        this.divContainer.className = "divArticle visible";
         if(img === null) {
             img = "./build/images/default.png";
         }
@@ -26,10 +27,6 @@ class Article {
         this.date.innerHTML = (new Date(date)).toLocaleString();
         this.image.src = img;
         this.source.innerHTML = source;
-
-        this.divContainer.style.cssText =
-            "width: 50%; display: flex; flex-wrap: nowrap; margin: 2rem auto; border: 1px solid darkgrey;" +
-            "border-radius: 5px";
 
         this.divRight.style.cssText = "width: 60%;";
         this.divLeft.style.cssText = "width: 40%";
@@ -51,6 +48,37 @@ class Article {
         this.divContainer.appendChild(this.divRight);
         this.divContainer.appendChild(this.divLeft);
         document.getElementById("divArticles").appendChild(this.divContainer);
+
+        this.mediaQuery();
+    }
+
+    mediaQuery() {
+        let div = this.divContainer;
+        check();
+        window.addEventListener('resize',check, false);
+
+        function check() {
+            if(window.matchMedia("(min-width: 1300px)").matches) {
+                return div.style.cssText =
+                    "display: flex; flex-wrap: nowrap; margin: 2rem auto; border: 1px solid darkgrey;" +
+                    "border-radius: 5px; cursor: pointer; width: 50%;";
+            }
+            else if(window.matchMedia("(min-width: 1000px)").matches) {
+                return div.style.cssText =
+                    "display: flex; flex-wrap: nowrap; margin: 2rem auto; border: 1px solid darkgrey;" +
+                    "border-radius: 5px; cursor: pointer; width: 65%;";
+            }
+            else if(window.matchMedia("(min-width: 700px)").matches) {
+                return div.style.cssText =
+                    "display: flex; flex-wrap: nowrap; margin: 2rem auto; border: 1px solid darkgrey;" +
+                    "border-radius: 5px; cursor: pointer; width: 85%;";
+            }
+            else {
+                return div.style.cssText =
+                    "display: flex; flex-wrap: nowrap; margin: 2rem auto; border: 1px solid darkgrey;" +
+                    "border-radius: 5px; cursor: pointer; width: 95%;";
+            }
+        }
     }
 }
 export {Article};
