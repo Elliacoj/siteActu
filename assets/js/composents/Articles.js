@@ -11,6 +11,7 @@ class Articles {
         this.expanded = false;
         this.scrollY = 0;
         this.divArticles = document.createElement("div");
+        this.check = true;
     }
 
     /**
@@ -75,7 +76,6 @@ class Articles {
         divArticle.forEach( e => e.addEventListener("click", () => this.animation(e, divArticle, p, width)));
     }
 
-
     /**
      *
      * @param e
@@ -84,107 +84,109 @@ class Articles {
      * @param width
      */
     animation(e, divArticle, p, width) {
-        e.removeEventListener("click", this.animation);
-        if(this.expanded === false) {
-            this.scrollY = window.scrollY;
-        }
-
-        divArticle.forEach(function (b) {
-
-            if(b !== e && b.className === "divArticle visible") {
-                b.animate(
-                    [
-                        {
-                            opacity: 0,
-                            easing: 'ease-in',
-                        }
-                    ],
-                    {
-                        duration: 500,
-                        easing: "linear",
-                        fill: "forwards",
-                    }
-                )
-                setTimeout(function () {
-                    b.style.display = "none";
-                    b.className = "divArticle hidden";
-                }, 500);
+        if(this.check === true) {
+            this.check = false;
+            if(this.expanded === false) {
+                this.scrollY = window.scrollY;
             }
-            else if(b !== e) {
-                b.style.display = "flex";
-                b.className = "divArticle visible";
-                b.animate([
-                        {
-                            opacity: 1,
-                            easing: 'ease-in',
-                        }
-                    ],
-                    {
-                        duration: 500,
-                        easing: "linear",
-                        fill: "forwards",
-                    }
-                );
-            }
-            else {
-                if(window.matchMedia("(min-width: 700px)").matches) {
-                    if(b.className === "divArticle visible") {
-                        b.firstChild.childNodes[2].after(p);
-                        b.animate([
-                                {
-                                    width: "90%",
-                                    easing: 'ease-in',
-                                }
-                            ],
-                            {
-                                duration: 500,
-                                easing: "linear",
-                                fill: "forwards",
-                            }
-                        );
-                        b.className = "divArticle visible view";
-                    }
-                    else {
-                        b.firstChild.childNodes[3].remove();
-                        b.animate([
-                                {
-                                    width: width,
-                                    easing: 'ease-in',
-                                }
-                            ],
-                            {
-                                duration: 500,
-                                easing: "linear",
-                                fill: "forwards",
-                            }
-                        );
-                        b.className = "divArticle visible";
-                    }
 
+            divArticle.forEach(function (b) {
+
+                if(b !== e && b.className === "divArticle visible") {
+                    b.animate(
+                        [
+                            {
+                                opacity: 0,
+                                easing: 'ease-in',
+                            }
+                        ],
+                        {
+                            duration: 500,
+                            easing: "linear",
+                            fill: "forwards",
+                        }
+                    )
+                    setTimeout(function () {
+                        b.style.display = "none";
+                        b.className = "divArticle hidden";
+                    }, 500);
+                }
+                else if(b !== e) {
+                    b.style.display = "flex";
+                    b.className = "divArticle visible";
+                    b.animate([
+                            {
+                                opacity: 1,
+                                easing: 'ease-in',
+                            }
+                        ],
+                        {
+                            duration: 500,
+                            easing: "linear",
+                            fill: "forwards",
+                        }
+                    );
                 }
                 else {
-                    if(b.className === "divArticle visible") {
-                        b.firstChild.childNodes[2].after(p);
-                        b.className = "divArticle visible view";
+                    if(window.matchMedia("(min-width: 700px)").matches) {
+                        if(b.className === "divArticle visible") {
+                            b.firstChild.childNodes[2].after(p);
+                            b.animate([
+                                    {
+                                        width: "90%",
+                                        easing: 'ease-in',
+                                    }
+                                ],
+                                {
+                                    duration: 500,
+                                    easing: "linear",
+                                    fill: "forwards",
+                                }
+                            );
+                            b.className = "divArticle visible view";
+                        }
+                        else {
+                            b.firstChild.childNodes[3].remove();
+                            b.animate([
+                                    {
+                                        width: width,
+                                        easing: 'ease-in',
+                                    }
+                                ],
+                                {
+                                    duration: 500,
+                                    easing: "linear",
+                                    fill: "forwards",
+                                }
+                            );
+                            b.className = "divArticle visible";
+                        }
+
                     }
                     else {
-                        b.firstChild.childNodes[3].remove();
-                        b.className = "divArticle visible";
+                        if(b.className === "divArticle visible") {
+                            b.firstChild.childNodes[2].after(p);
+                            b.className = "divArticle visible view";
+                        }
+                        else {
+                            b.firstChild.childNodes[3].remove();
+                            b.className = "divArticle visible";
+                        }
                     }
                 }
+            });
+
+            if (this.expanded) {
+                this.expanded = false;
+                window.scrollTo(0, this.scrollY);
+                this.scrollY = 0;
             }
-        });
+            else {
+                this.expanded = true;
+            }
 
-        if (this.expanded) {
-            this.expanded = false;
-            window.scrollTo(0, this.scrollY);
-            this.scrollY = 0;
+            setTimeout(() => this.check = true, 600);
         }
-        else {
-            this.expanded = true;
-        }
-
-        setTimeout(() =>  e.addEventListener("click", this.animation), 600);
     }
 }
 
